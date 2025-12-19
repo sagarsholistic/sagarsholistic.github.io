@@ -18,7 +18,7 @@ export function ReviewsManager() {
 
   async function loadReviews() {
     try {
-      const q = query(collection(db, 'reviews'), orderBy('reviewDate', 'desc'));
+      const q = query(collection(db!, 'reviews'), orderBy('reviewDate', 'desc'));
       const querySnapshot = await getDocs(q);
       const reviewsData = querySnapshot.docs.map(doc => ({
         id: doc.id,
@@ -36,7 +36,7 @@ export function ReviewsManager() {
     if (!confirm('Are you sure you want to delete this review? This action cannot be undone.')) return;
 
     try {
-      await deleteDoc(doc(db, 'reviews', reviewId));
+      await deleteDoc(doc(db!, 'reviews', reviewId));
       setReviews(reviews.filter(r => r.id !== reviewId));
     } catch (error) {
       console.error('Error deleting review:', error);
@@ -46,7 +46,7 @@ export function ReviewsManager() {
 
   async function handleTogglePublish(review: Review) {
     try {
-      const reviewRef = doc(db, 'reviews', review.id);
+      const reviewRef = doc(db!, 'reviews', review.id);
       await updateDoc(reviewRef, {
         isPublished: !review.isPublished,
         updatedAt: Timestamp.now()
@@ -252,10 +252,10 @@ function ReviewForm({ review, onSave, onCancel }: {
 
       if (review) {
         // Update existing
-        await updateDoc(doc(db, 'reviews', review.id), reviewData);
+        await updateDoc(doc(db!, 'reviews', review.id), reviewData);
       } else {
         // Create new
-        await addDoc(collection(db, 'reviews'), {
+        await addDoc(collection(db!, 'reviews'), {
           ...reviewData,
           createdAt: Timestamp.now()
         });

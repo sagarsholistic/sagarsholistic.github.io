@@ -55,6 +55,7 @@ export function Menu() {
             <Li><A href={'#fee-payment'}>Fees</A></Li>
             <Li><A href={'#what-is-homeopathy'}>What is Homeopathy</A></Li>
             <Li><A href={'#appointment'}>Contact</A></Li>
+            <Li><A href={'/reviews'}>Reviews</A></Li>
         </ul>
     </nav>
 }

@@ -7,6 +7,8 @@ import {
 } from "react";
 import {colors} from "../colors";
 import {P} from "../components/P.tsx";
+import {usePageContent} from "../../hooks/usePageContent";
+import {GenericPageContent} from "../../types/content.types";
 
 const Input = (properties: PropsWithChildren<InputHTMLAttributes<HTMLInputElement> & {
     containerStyle?: CSSProperties
@@ -58,6 +60,9 @@ type Customer = { name: string, email: string, phone: string, childName: string,
 export function Appointment() {
     const id = useId();
     const triggeredButtonRef = useRef<'email' | 'phone' | 'sms'>('email');
+    const {content} = usePageContent<GenericPageContent>('appointment');
+
+    const introText = content?.content.html || `<p>Please message me briefly about your child's problems, what treatment he/she has received and what you expect from the consultation. I will be able to decide whether your child would benefit from Homeopathy or not and then I will offer your child possible appointment dates / times.</p><p>Use the contact form below to reach out to me.</p>`;
 
     function sendEmail(props: Customer) {
         const a = document.createElement('a');
@@ -124,11 +129,7 @@ ${props.message}
     }
 
     return <Page title={'Appointment'} path={'appointment'} stickyHeader={false}>
-        <P>Please message me briefly about your child’s problems, what treatment he/she has received and what you expect
-            from the consultation. I will be able to decide whether your child would benefit from Homeopathy or not and
-            then I will offer your child possible appointment dates / times.
-        </P>
-        <P>Use the contact form below to reach out to me.</P>
+        <div dangerouslySetInnerHTML={{ __html: introText }} style={{ marginBottom: '1rem' }} />
         <P>
         <form style={{display: 'flex', flexDirection: 'column', padding: '1rem 0rem'}} onSubmit={(e) => {
             e.preventDefault();

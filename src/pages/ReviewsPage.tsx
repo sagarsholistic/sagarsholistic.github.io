@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db, FIREBASE_ENABLED } from '../config/firebase';
 import { Review } from '../types/content.types';
@@ -6,8 +7,10 @@ import { StarRating } from '../components/StarRating';
 import { Page } from '../fragment/components/Page';
 
 export function ReviewsPage() {
+  const navigate = useNavigate();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     async function fetchReviews() {
@@ -29,8 +32,14 @@ export function ReviewsPage() {
           ...doc.data()
         })) as Review[];
         setReviews(reviewsData);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching reviews:', error);
+        // Check if it's an index error
+        if (error?.message?.includes('index')) {
+          setError('Firestore index required. Check the browser console for a link to create the index, or contact your administrator.');
+        } else {
+          setError('Failed to load reviews. Please try again later.');
+        }
       } finally {
         setLoading(false);
       }
@@ -52,6 +61,36 @@ export function ReviewsPage() {
   return (
     <Page title="Customer Reviews" path="reviews">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            alignSelf: 'flex-start',
+            padding: '0.75rem 1.5rem',
+            background: '#80BC6A',
+            color: 'white',
+            border: 'none',
+            borderRadius: 8,
+            fontSize: '1rem',
+            cursor: 'pointer',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            transition: 'background 0.2s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.background = '#6da858'}
+          onMouseLeave={(e) => e.currentTarget.style.background = '#80BC6A'}
+        >
+          ← Back to Home
+        </button>
+        {error && (
+          <div style={{
+            padding: '1rem',
+            background: '#fee',
+            color: '#c33',
+            borderRadius: 8,
+            border: '1px solid #f5c6cb'
+          }}>
+            {error}
+          </div>
+        )}
         <p style={{ fontSize: '1.1rem', color: '#555', lineHeight: 1.6 }}>
           Read what our patients have to say about their experience with homeopathic treatment.
         </p>

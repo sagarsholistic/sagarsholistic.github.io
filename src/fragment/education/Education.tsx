@@ -2,11 +2,23 @@ import {colors} from "../colors";
 import {useViewportDimension} from "../useViewportDimension";
 import {Page} from "../components/Page";
 import {P} from "../components/P.tsx";
+import {usePageContent} from "../../hooks/usePageContent";
+import {GenericPageContent} from "../../types/content.types";
 
 export function Education() {
     const dimension = useViewportDimension();
     const columnWidth = dimension.width < 700 ? '100%' : '50%';
     const hideBorder = dimension.width < 700;
+    const {content} = usePageContent<GenericPageContent>('education');
+
+    // If content from Firebase exists, render it as HTML
+    if (content?.content.html) {
+        return <Page title={'Education & License'} path={'education'}>
+            <div dangerouslySetInnerHTML={{ __html: content.content.html }} />
+        </Page>;
+    }
+
+    // Otherwise, render the original hardcoded structure
     return <Page title={'Education & License'} path={'education'}>
         <div style={{display: 'flex', flexWrap: 'wrap'}}>
             <div style={{display: 'flex', flexDirection: 'column', width: columnWidth}}>

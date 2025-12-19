@@ -19,7 +19,7 @@ export function EditPage() {
       if (!pageId) return;
 
       try {
-        const docRef = doc(db, 'pageContent', pageId);
+        const docRef = doc(db!, 'pageContent', pageId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -61,7 +61,7 @@ export function EditPage() {
     }
 
     try {
-      const docRef = doc(db, 'pageContent', pageId);
+      const docRef = doc(db!, 'pageContent', pageId);
       await setDoc(docRef, {
         ...content,
         lastModified: Timestamp.now(),
@@ -365,6 +365,75 @@ function getDefaultContentStructure(pageId: string): any {
   if (pageId === 'feePayment') {
     return {
       html: `<p style="font-weight: bold;">First appointment : 1 - 2 hours : $150</p><p>It includes 1st Follow up appointment at 4-6 weeks</p><p>Each Future Follow ups : $100</p><p>I do not accept Insurances, Medicaid or Medicare. Payment is expected at the time of service by credit card. If you have to cancel an appointment, you need to notify me 48 hours in advance, if not you will be charged a fee of $50.</p>`
+    };
+  }
+
+  if (pageId === 'education') {
+    return {
+      html: `<h2>Education</h2>
+<h3>Medical Degree - MBBS</h3>
+<p><strong>1971</strong><br>Vijayanagara Institute of Medical sciences<br>Bellary, India</p>
+
+<h3>Pediatric Residency</h3>
+<p><strong>1981 - 1984</strong><br>Rush Presbyterian St. Luke Medical Center<br>Chicago, IL</p>
+
+<h3>Homeopathic Education</h3>
+<p><strong>2000 - 2022</strong><br>New England School of Homeopathy<br>Connecticut, MA</p>
+
+<h2>Board Certification & License</h2>
+
+<h3>Board Certification</h3>
+<p>American Board of Pediatrics: 1986<br>Diploma American Board Of Homeopathic Medicine: 2022</p>
+
+<h3>Medical License</h3>
+<p>State of Maryland</p>`
+    };
+  }
+
+  if (pageId === 'conditionsTreated') {
+    return {
+      html: `<h2>Conditions Treated</h2>
+<ul>
+<li><strong>Mental health problems</strong>
+  <ul>
+    <li>ADD, ADHD</li>
+    <li>Anxiety</li>
+    <li>Autism spectrum disorders</li>
+    <li>Behavioral problems</li>
+    <li>Depression</li>
+    <li>Developmental Delays</li>
+  </ul>
+</li>
+<li><strong>Allergies and Asthma</strong></li>
+<li><strong>Frequent Infections</strong>
+  <ul>
+    <li>Ear infections</li>
+    <li>Tonsillitis</li>
+    <li>Sinusitis</li>
+    <li>Bronchitis & Pneumonia</li>
+  </ul>
+</li>
+<li><strong>Eczema & other Skin problems</strong></li>
+<li><strong>Bowel problems</strong></li>
+<li><strong>Arthritis</strong></li>
+<li><strong>Injuries and its complications</strong></li>
+<li><strong>Growth Problems</strong></li>
+</ul>`
+    };
+  }
+
+  if (pageId === 'appointment') {
+    return {
+      html: `<p>Please message me briefly about your child's problems, what treatment he/she has received and what you expect from the consultation. I will be able to decide whether your child would benefit from Homeopathy or not and then I will offer your child possible appointment dates / times.</p>
+<p>Use the contact form below to reach out to me.</p>`
+    };
+  }
+
+  if (pageId === 'footer') {
+    return {
+      html: `<h3>Sagars Homeopathy For Kids</h3>
+<p>Email: pedsagar@gmail.com</p>
+<p>©${new Date().getFullYear()} by Sagars Homeopathy For Kids</p>`
     };
   }
 

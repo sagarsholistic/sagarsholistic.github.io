@@ -8,6 +8,8 @@ import eczema from "./eczema.png";
 import growth from "./growth.png";
 import injury from "./injury.png";
 import {PropsWithChildren, useRef} from "react";
+import {usePageContent} from "../../hooks/usePageContent";
+import {GenericPageContent} from "../../types/content.types";
 
 const conditions: { title: string, image: string, details: string[] }[] = [
     {
@@ -58,6 +60,16 @@ function ConditionsTreatedIcon(props:PropsWithChildren<{condition: { title: stri
 }
 
 export function ConditionsTreated() {
+    const {content} = usePageContent<GenericPageContent>('conditionsTreated');
+
+    // If content from Firebase exists, render it as HTML
+    if (content?.content.html) {
+        return <Page title={'Conditions Treated'} path={'conditions-treated'}>
+            <div dangerouslySetInnerHTML={{ __html: content.content.html }} />
+        </Page>;
+    }
+
+    // Otherwise, render the original hardcoded structure with icons
     return <Page title={'Conditions Treated'} path={'conditions-treated'}>
         <div style={{display: 'flex', flexWrap: 'wrap',justifyContent:'center'}}>
             {conditions.map((condition) => {

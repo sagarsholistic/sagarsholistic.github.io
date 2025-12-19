@@ -1,6 +1,5 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { FIREBASE_ENABLED } from '../config/firebase';
 
 export function AdminLayout() {
   const { signOut, currentUser, offlineMode } = useAuth();
