@@ -3,9 +3,9 @@ export function toDo(...args:any[]){
 }
 
 export function debounce(callback:(...args:never[]) => void,config:{timeout:number}){
-    let timoutId = 0;
+    let timoutId: ReturnType<typeof setTimeout> | number = 0;
     return (...args:never[]) => {
-        clearTimeout(timoutId);
+        clearTimeout(timoutId as number);
         timoutId = setTimeout(() => {
             callback(...args);
         },config.timeout)

@@ -1,38 +1,41 @@
-import {Menu} from "./fragment/menu/Menu";
-import {Banner} from "./fragment/banner/Banner";
-import {Journey} from "./fragment/journey/Journey";
-import {Education} from "./fragment/education/Education";
-import {ConditionsTreated} from "./fragment/conditions-treated/ConditionsTreated";
-import {Appointment} from "./fragment/appointment/Appointment";
-import {FirstConsultation} from "./fragment/first-consultation/FirstConsultation.tsx";
-import {FollowUpConsultations} from "./fragment/followup-consultations/FollowUpConsultations.tsx";
-import {FeePayment} from "./fragment/fee-payment/FeePayment.tsx";
-import {WhatIsHomeopathy} from "./fragment/what-is-homeopathy/WhatIsHomeopathy.tsx";
-import {Footer} from "./fragment/footer/Footer.tsx";
-import {ProgressBar} from "./fragment/progress/ProgressBar.tsx";
-
-/**
- *
- *
- */
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { PublicLayout } from './layouts/PublicLayout';
+import { AdminLayout } from './layouts/AdminLayout';
+import { AdminLogin } from './pages/admin/AdminLogin';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { EditPage } from './pages/admin/EditPage';
+import { ReviewsManager } from './pages/admin/ReviewsManager';
+import { ReviewsPage } from './pages/ReviewsPage';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<PublicLayout />} />
+          <Route path="/reviews" element={<ReviewsPage />} />
 
-
-    return <div style={{display: 'flex', flexDirection: 'column', maxWidth: 900, margin: 'auto'}}>
-        <ProgressBar />
-        <Menu/>
-        <Banner/>
-        <Journey/>
-        <Education/>
-        <ConditionsTreated/>
-        <FirstConsultation/>
-        <FollowUpConsultations/>
-        <Appointment/>
-        <FeePayment/>
-        <WhatIsHomeopathy/>
-        <Footer/>
-    </div>
+          {/* Admin routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route path="edit/:pageId" element={<EditPage />} />
+            <Route path="reviews" element={<ReviewsManager />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
 
 export default App
